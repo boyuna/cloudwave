@@ -1,0 +1,6 @@
+file-system-id : fs-0bbad881775d30019
+vpc-id : vpc-0b3f4e0b8496056c8
+vpc cidr : 10.0.0.0/16
+10.0.3.0/24 |  subnet-002fcb2d21f40ada7 
+10.0.4.0/24 |  subnet-04b529c1473926527
+sg-072f1673689b96d20

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodejs-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nodejs
+  template:
+    metadata:
+      labels:
+        app: nodejs
+    spec:
+      nodeSelector: 
+        memsize: "high"
+      containers:
+      - name: nodejs
+        image: dangtong/nodejs
+        resources:
+          requests:
+            cpu: "500mi"
+            memory: "100m"
+          limits: 
+            cpu: "600mi"
+            memory: "200m"
+        ports:
+        - containerPort: 8080

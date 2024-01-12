@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-pvc1
+spec:
+  resources:
+    requests:
+      storage: 1Gi
+  accessModes:
+  - ReadWriteOnce
+  # storageClassName를 안쓰고 싶으면 ""이렇게 써야한다.
+  # 아예 빼버리면 오히려 디폴트로 할당된다. 
+  storageClassName: ""
+  volumeMode: Filesystem
+  volumeName: mongodb-pv1

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    name: nginx
+spec:
+  volumes:
+  - name: nginx-config
+    configMap:
+      name: fortune-config
+  containers:
+  - name: nginx
+    image: nginx:1.7.9
+    volumeMounts: 
+    - name: nginx-config
+      mountPath: /etc/nginx/conf.d
+      readOnly: true
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 8080
+      # conf파일에서 8080으로 변경했으므로 80이 아닌 8080이다.

@@ -1,0 +1,30 @@
+# deployment의 메타 버전(section1)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  # 배포 전략
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 1
+      maxUnavailable: 0
+  # 감시자 - replicatset controller이 감시 (section2)
+  selector:
+    matchLabels:
+      app: nginx
+  # pod 템플릿 (section3)
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80

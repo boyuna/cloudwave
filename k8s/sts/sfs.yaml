@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nodeapp-sfs
+spec:
+  selector:
+    matchLabels:
+      app: nodeapp
+  serviceName: nodeapp
+  replicas: 3
+  minReadySeconds: 8
+  template:
+    metadata:
+      labels:
+        app: nodeapp
+    spec:
+      containers:
+      - name: nodeapp
+        image: choiboyun/nodeapp
+        ports:
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - name: www
+          mountPath: /usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: www
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: persistent-advanced

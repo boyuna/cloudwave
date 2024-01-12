@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mongodb
+  labels:
+    name: mongodb
+spec:
+  volumes: 
+  - name: mongodb-data 
+    persistentVolumeClaim: 
+      claimName: mongodb-pvc2
+  containers:
+  - name: mongodb
+    image: mongo
+    volumeMounts: 
+    - name: mongodb-data 
+      mountPath: /data/db 
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 27017

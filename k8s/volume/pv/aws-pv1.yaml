@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongodb-pv1
+spec:
+  capacity:
+    storage: 20
+  csi:
+    driver: ebs.csi.aws.com
+    fsType: ext4
+    volumeHandle: vol-0e67dde43857112a6
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  # 이 디스크를 쓸 수 있는 것은 누구인가를 정의 
+  # 이렇게 해 놓으면 pod는 무조건 하나의 node에만 뜬다. 
+  nodeAffinity: # 노드 친밀도
+    required: # 강제 조건 
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: topology.ebs.csi.aws.com/zone # 이 zone을 만족하는 노드만 마운트할 수 있다.
+              operator: In
+              values:
+                - ap-northeast-2a
