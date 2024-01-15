@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-cache
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: store
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: store
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - { key: app,operator: In,values: [ store ] }
+              topologyKey: "topology.kubernetes.io/region"
+      containers:
+        - name: redis-server
+          image: redis:3.2-alpine
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - { key: app,operator: In,values: [ nginx ] }
+              topologyKey: "topology.kubernetes.io/zone"
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - { key: app,operator: In,values: [ store ] }
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+        - name: nginx
+          image: nginx
